@@ -10,3 +10,5 @@ coverage
 dist
 compiled
 .awcache
+test-level-db/
+test-ipfs-repo/

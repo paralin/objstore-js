@@ -1,10 +1,20 @@
 import * as pbobject from '@aperturerobotics/pbobject'
+import { storageref } from '@aperturerobotics/storageref';
+
 import {
     IArrayPtr,
     ILocalStore,
     IRemoteStore,
     NotFoundError,
 } from './interfaces'
+
+// IStoreObjectResult contains the result of the storeObject call.
+export interface IStoreObjectResult {
+    // storageRef contains the built storage reference.
+    storageRef: storageref.StorageRef
+    // data contains the encoded object.
+    data: Uint8Array
+}
 
 // ObjectStore overlays a remote encrypted-at-rest blob store over the local unencrypted hash-based storage.
 export class ObjectStore implements ILocalStore, IRemoteStore {
@@ -48,6 +58,24 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
         // Store it locally
         await this.storeLocal(obj, { ptr: digest })
         return objDecoded
+    }
+
+    // storeObject digests, seals, encrypts, and stores a object locally and remotely.
+    // Returns a result or throws an error.
+    public async storeObject(obj: pbobject.IObject, encConf: pbobject.IEncryptionConfig): Promise<IStoreObjectResult> {
+        let ow = await pbobject.newObjectWrapper(obj, encConf, new Date())
+        let blob = pbobject.ObjectWrapper.encode(ow).finish()
+        let digest = this.digestData(blob)
+        let storageRefStr = await this.storeRemote(blob)
+        let storageRef = new storageref.StorageRef({
+            storageType: storageref.StorageType.StorageType_IPFS,
+            objectDigest: digest,
+            ipfs: {
+                objectHash: storageRefStr,
+            },
+        })
+
+        return { storageRef: storageRef, data: blob }
     }
 
     // getLocal returns an object by digest, assuming it has already been fetched into the decrypted cache.

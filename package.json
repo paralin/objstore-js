@@ -49,7 +49,10 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/pb/"
+      "/pb/",
+      "/packages/pbobject/",
+      "/packages/objectenc/",
+      "/packages/objectsig/"
     ],
     "coverageThreshold": {
       "global": {
@@ -90,6 +93,7 @@
   },
   "dependencies": {
     "@aperturerobotics/pbobject": "^0.2.0",
+    "arraybuffer-equal": "^1.0.4",
     "buffer": "^5.0.8",
     "fs-pull-blob-store": "^0.4.1",
     "ipfs": "^0.27.5",
