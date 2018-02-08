@@ -26,18 +26,23 @@ describe('ObjStore', () => {
     let key = randombytes(32)
     let nonce = randombytes(24)
     let ipfs: IPFS;
+    let levelBlob: LevelBlobDb;
+    let remoteStore: RemoteStore;
+    let localStore: LocalDB;
+
     beforeAll(async () => {
         ipfs = await buildIPFS()
+        levelBlob = new LevelBlobDb('./test-level-db')
+        remoteStore = new RemoteStore(ipfs)
+        localStore = new LocalDB(levelBlob)
     })
 
-    afterAll(() => {
+    afterAll(async () => {
+        await levelBlob.close()
         ipfs.stop()
     })
 
     it('should store and retrieve an object', async () => {
-        let levelBlob = new LevelBlobDb('./test-level-db')
-        let remoteStore = new RemoteStore(ipfs)
-        let localStore = new LocalDB(levelBlob)
         let objStore = new ObjectStore(localStore, remoteStore)
 
         let encConf: IEncryptionConfig = {

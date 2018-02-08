@@ -44,4 +44,8 @@ export class LevelBlobDb implements IDb {
                 })
         })
     }
+
+    public close(): Promise<void> {
+        return this.db.close()
+    }
 }
