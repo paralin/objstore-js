@@ -69,7 +69,6 @@ describe('ObjStore', () => {
             obj,
             encConf,
         )
-        console.log(res.storageRef.toJSON())
 
         let objAfter = new MockObject()
         objAfter = await objStore.getOrFetch(

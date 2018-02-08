@@ -1,6 +1,7 @@
 import {
     ILocalStore,
     IArrayPtr,
+    NotFoundError,
 } from '../interfaces'
 import { IDb } from '../db/interfaces'
 import { pbobject, IObject } from '@aperturerobotics/pbobject'
@@ -26,15 +27,15 @@ export class LocalDB implements ILocalStore {
     // digestData digests the unencrypted data.
     public digestData(data: Uint8Array): Uint8Array {
         let b = multihashing.digest(toBuffer(data), 'sha2-256')
-        return b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)
+        return new Uint8Array(b, b.byteOffset, b.byteLength)
     }
 
     // getLocal returns an object by digest, assuming it has already been fetched into the decrypted cache.
-    public async getLocal(digest: Uint8Array, obj: IObject): Promise<IObject | null> {
+    public async getLocal(digest: Uint8Array, obj: IObject): Promise<IObject> {
         let digestKey = this.getDigestKey(digest)
         let data = await this.db.getKey(digestKey)
         if (!data || !data.length) {
-            return null
+            throw new NotFoundError()
         }
 
         return obj.decode(data)
@@ -50,7 +51,7 @@ export class LocalDB implements ILocalStore {
         let data = obj.encode(obj).finish()
         let computedDigest = this.digestData(data)
         if (digest && digest.length) {
-            if (!isEqual(digest, computedDigest)) {
+            if (!isEqual(new ArrayBuffer(digest), new ArrayBuffer(computedDigest))) {
                 throw new Error('digest of encoded data did not match given digest')
             }
         } else if (hashPtr) {

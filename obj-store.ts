@@ -39,9 +39,11 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
                 return localObj
             }
         } catch (e) {
+            /*
             if (!(e instanceof NotFoundError)) {
                 throw e
             }
+            */
         }
 
         // Call out to the remote database as the next layer of caches.
@@ -75,6 +77,7 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
             },
         })
 
+        await this.storeLocal(obj, { ptr: digest })
         return { storageRef: storageRef, data: blob }
     }
 

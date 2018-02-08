@@ -1,105 +1,106 @@
 {
-  "name": "@aperturerobotics/objstore",
-  "private": true,
-  "version": "0.0.0",
-  "description": "Object storage and caching with pluggable encryption schemes.",
-  "main": "index.ts",
-  "author": "Christian Stewart <christian@paral.in>",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:aperturerobotics/objstore-js.git"
-  },
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "scripts": {
-    "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
-    "prebuild": "rimraf dist",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
-    "commit": "git-cz",
-    "precommit": "lint-staged"
-  },
-  "lint-staged": {
-    "**/*.ts": [
-      "prettier --write --no-semi --single-quote",
-      "git add"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
+    "name": "@aperturerobotics/objstore",
+    "private": true,
+    "version": "0.0.0",
+    "description": "Object storage and caching with pluggable encryption schemes.",
+    "main": "index.ts",
+    "author": "Christian Stewart <christian@paral.in>",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:aperturerobotics/objstore-js.git"
     },
-    "validate-commit-msg": {
-      "types": "conventional-commit-types",
-      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+    "engines": {
+        "node": ">=6.0.0"
+    },
+    "scripts": {
+        "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+        "prebuild": "rimraf dist",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
+        "commit": "git-cz",
+        "precommit": "lint-staged"
+    },
+    "lint-staged": {
+        "**/*.ts": [
+            "prettier --write --no-semi --single-quote",
+            "git add"
+        ]
+    },
+    "config": {
+        "commitizen": {
+            "path": "node_modules/cz-conventional-changelog"
+        },
+        "validate-commit-msg": {
+            "types": "conventional-commit-types",
+            "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+        }
+    },
+    "jest": {
+        "transform": {
+            ".(ts|tsx)": "../../node_modules/ts-jest/preprocessor.js"
+        },
+        "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js"
+        ],
+        "coveragePathIgnorePatterns": [
+            "/node_modules/",
+            "/test/",
+            "/pb/",
+            "/packages/pbobject/",
+            "/packages/objectenc/",
+            "/packages/objectsig/",
+            "/packages/storageref/"
+        ],
+        "coverageThreshold": {
+            "global": {
+                "branches": 90,
+                "functions": 95,
+                "lines": 95,
+                "statements": 95
+            }
+        },
+        "collectCoverage": true,
+        "mapCoverage": true
+    },
+    "devDependencies": {
+        "@types/es6-promise": "^3.3.0",
+        "@types/ipfs": "https://github.com/zabirauf/ipfs-types/archive/aef66519bd24036b706844e96378dcfecab54185/ipfs-types.tar.gz",
+        "@types/jest": "^21.1.0",
+        "@types/node": "^8.0.0",
+        "colors": "^1.1.2",
+        "commitizen": "^2.9.6",
+        "coveralls": "^3.0.0",
+        "cross-env": "^5.0.1",
+        "cz-conventional-changelog": "^2.0.0",
+        "husky": "^0.14.0",
+        "lint-staged": "^6.0.0",
+        "lodash.camelcase": "^4.3.0",
+        "prettier": "^1.4.4",
+        "prompt": "^1.0.0",
+        "replace-in-file": "^3.0.0-beta.2",
+        "rimraf": "^2.6.1",
+        "ts-jest": "^22.0.0",
+        "ts-node": "^4.0.1",
+        "tslint": "^5.4.3",
+        "tslint-config-prettier": "^1.1.0",
+        "tslint-config-standard": "^7.0.0",
+        "typedoc": "^0.9.0",
+        "typescript": "^2.3.4",
+        "validate-commit-msg": "^2.12.2"
+    },
+    "dependencies": {
+        "@aperturerobotics/pbobject": "^0.2.0",
+        "arraybuffer-equal": "^1.0.4",
+        "buffer": "^5.0.8",
+        "fs-pull-blob-store": "^0.4.1",
+        "ipfs": "^0.27.5",
+        "level": "^2.1.2",
+        "multihashing": "^0.3.2",
+        "protobufjs": "^6.8.0",
+        "typedarray-to-buffer": "^3.1.0"
     }
-  },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/test/",
-      "/pb/",
-      "/packages/pbobject/",
-      "/packages/objectenc/",
-      "/packages/objectsig/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
-      }
-    },
-    "collectCoverage": true,
-    "mapCoverage": true
-  },
-  "devDependencies": {
-    "@types/es6-promise": "^3.3.0",
-    "@types/ipfs": "https://github.com/zabirauf/ipfs-types/archive/aef66519bd24036b706844e96378dcfecab54185/ipfs-types.tar.gz",
-    "@types/jest": "^21.1.0",
-    "@types/node": "^8.0.0",
-    "colors": "^1.1.2",
-    "commitizen": "^2.9.6",
-    "coveralls": "^3.0.0",
-    "cross-env": "^5.0.1",
-    "cz-conventional-changelog": "^2.0.0",
-    "husky": "^0.14.0",
-    "lint-staged": "^6.0.0",
-    "lodash.camelcase": "^4.3.0",
-    "prettier": "^1.4.4",
-    "prompt": "^1.0.0",
-    "replace-in-file": "^3.0.0-beta.2",
-    "rimraf": "^2.6.1",
-    "ts-jest": "^22.0.0",
-    "ts-node": "^4.0.1",
-    "tslint": "^5.4.3",
-    "tslint-config-prettier": "^1.1.0",
-    "tslint-config-standard": "^7.0.0",
-    "typedoc": "^0.9.0",
-    "typescript": "^2.3.4",
-    "validate-commit-msg": "^2.12.2"
-  },
-  "dependencies": {
-    "@aperturerobotics/pbobject": "^0.2.0",
-    "arraybuffer-equal": "^1.0.4",
-    "buffer": "^5.0.8",
-    "fs-pull-blob-store": "^0.4.1",
-    "ipfs": "^0.27.5",
-    "level": "^2.1.2",
-    "multihashing": "^0.3.2",
-    "protobufjs": "^6.8.0",
-    "typedarray-to-buffer": "^3.1.0"
-  }
 }
