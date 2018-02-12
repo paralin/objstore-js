@@ -8,7 +8,8 @@ import { pbobject, IObject } from '@aperturerobotics/pbobject'
 
 import isEqual from 'arraybuffer-equal'
 import toBuffer from 'typedarray-to-buffer'
-import * as multihashing from 'multihashing'
+import multihashing from 'multihashing'
+import multihashes from 'multihashes'
 
 // LocalDB wraps a db.IDb to implement LocalStore.
 export class LocalDB implements ILocalStore {
@@ -26,7 +27,11 @@ export class LocalDB implements ILocalStore {
 
     // digestData digests the unencrypted data.
     public digestData(data: Uint8Array): Uint8Array {
-        let b = multihashing.digest(toBuffer(data), 'sha2-256')
+        // let b = multihashing.digest(toBuffer(data), 'sha2-256')
+        let mh = multihashing(toBuffer(data), 'sha2-256')
+        let decMh = multihashes.decode(mh)
+        let b = decMh.digest
+
         return new Uint8Array(b, b.byteOffset, b.byteLength)
     }
 
@@ -60,5 +65,10 @@ export class LocalDB implements ILocalStore {
 
         digest = computedDigest
         return this.db.setKey(this.getDigestKey(digest), data)
+    }
+
+    // clearDatabase clears the database.
+    public async clearDatabase(): Promise<void> {
+        return this.db.clearKeys()
     }
 }

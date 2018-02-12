@@ -45,6 +45,14 @@ export class LevelBlobDb implements IDb {
         })
     }
 
+    // clearKeys clears the keys in the database.
+    public async clearKeys(): Promise<void> {
+        let keys = await this.listKeys("")
+        for (let key of keys) {
+            await this.db.del(key)
+        }
+    }
+
     public close(): Promise<void> {
         return this.db.close()
     }

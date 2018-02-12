@@ -35,4 +35,9 @@ export class InmemDB implements IDb {
 
         return result
     }
+
+    // clearKeys clears all of the keys.
+    public async clearKeys(): Promise<void> {
+        this.db = {}
+    }
 }

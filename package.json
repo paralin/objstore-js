@@ -40,6 +40,9 @@
         "transform": {
             ".(ts|tsx)": "../../node_modules/ts-jest/preprocessor.js"
         },
+        "transformIgnorePatterns": [
+            "(!@aperturerobotics)"
+        ],
         "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
         "moduleFileExtensions": [
             "ts",
@@ -69,7 +72,7 @@
     "devDependencies": {
         "@types/es6-promise": "^3.3.0",
         "@types/ipfs": "https://github.com/zabirauf/ipfs-types/archive/aef66519bd24036b706844e96378dcfecab54185/ipfs-types.tar.gz",
-        "@types/jest": "^21.1.0",
+        "@types/jest": "^22.1.0",
         "@types/node": "^8.0.0",
         "colors": "^1.1.2",
         "commitizen": "^2.9.6",
@@ -78,7 +81,6 @@
         "cz-conventional-changelog": "^2.0.0",
         "husky": "^0.14.0",
         "lint-staged": "^6.0.0",
-        "lodash.camelcase": "^4.3.0",
         "prettier": "^1.4.4",
         "prompt": "^1.0.0",
         "replace-in-file": "^3.0.0-beta.2",

@@ -1,5 +1,5 @@
 import * as pbobject from '@aperturerobotics/pbobject'
-import { storageref } from '@aperturerobotics/storageref';
+import { storageref } from '@aperturerobotics/storageref/pb';
 
 import {
     IArrayPtr,
@@ -65,9 +65,10 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
     // storeObject digests, seals, encrypts, and stores a object locally and remotely.
     // Returns a result or throws an error.
     public async storeObject(obj: pbobject.IObject, encConf: pbobject.IEncryptionConfig): Promise<IStoreObjectResult> {
-        let ow = await pbobject.newObjectWrapper(obj, encConf, new Date())
+        let owres = await pbobject.newObjectWrapper(obj, encConf)
+        let ow = owres.wrapper
         let blob = pbobject.ObjectWrapper.encode(ow).finish()
-        let digest = this.digestData(blob)
+        let digest = this.digestData(owres.data)
         let storageRefStr = await this.storeRemote(blob)
         let storageRef = new storageref.StorageRef({
             storageType: storageref.StorageType.StorageType_IPFS,
@@ -105,5 +106,30 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
     // storeRemote stores a blob in blob storage and returns the storage reference string.
     public storeRemote(blob: Uint8Array): Promise<string> {
         return this.remoteStore.storeRemote(blob)
+    }
+
+    // getOrFetchReference gets or fetches a reference, checking the reference type.
+    public getOrFetchReference(
+        ref: storageref.IStorageRef | null,
+        obj: pbobject.IObject,
+        encConf: pbobject.IEncryptionConfig,
+    ): Promise<pbobject.IObject> {
+        if (!ref) {
+            throw new Error('storage reference expected')
+        }
+
+        if (!ref.ipfs || ref.storageType !== storageref.StorageType.StorageType_IPFS) {
+            throw new Error(`expected ipfs storage ref, got ${ref.storageType}`)
+        }
+
+        if (!ref.ipfs.objectHash || !ref.ipfs.objectHash.length) {
+            throw new Error('ipfs object hash empty')
+        }
+
+        if (!ref.objectDigest) {
+            throw new Error('expected ipfs storage reference to have object digest')
+        }
+
+        return this.getOrFetch(ref.objectDigest, ref.ipfs.objectHash, obj, encConf)
     }
 }

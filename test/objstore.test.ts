@@ -78,5 +78,14 @@ describe('ObjStore', () => {
             encConf,
         )
         expect(objAfter.testField).toEqual(obj.testField)
+
+        await localStore.clearDatabase()
+        objAfter = await objStore.getOrFetch(
+            res.storageRef.objectDigest,
+            res.storageRef.ipfs.objectHash,
+            objAfter,
+            encConf,
+        )
+        expect(objAfter.testField).toEqual(obj.testField)
     })
 })

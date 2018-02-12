@@ -6,4 +6,6 @@ export interface IDb {
     setKey(key: string, val: Uint8Array): Promise<void>;
     // listKeys returns a list of keys with the specified prefix.
     listKeys(prefix: string): Promise<string[]>;
+    // clearKeys deletes all the keys.
+    clearKeys(): Promise<void>
 }
