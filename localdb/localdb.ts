@@ -6,8 +6,8 @@ import {
 import { IDb } from '../db/interfaces'
 import { pbobject, IObject } from '@aperturerobotics/pbobject'
 
-import isEqual from 'arraybuffer-equal'
-import toBuffer from 'typedarray-to-buffer'
+import arraybufferEqual from 'arraybuffer-equal'
+import typedarrayToBuffer from 'typedarray-to-buffer'
 import multihashing from 'multihashing'
 import multihashes from 'multihashes'
 
@@ -22,14 +22,14 @@ export class LocalDB implements ILocalStore {
 
     // getDigestKey returns the key for the given digest.
     public getDigestKey(hash: Uint8Array): string {
-        return toBuffer(hash).toString('hex')
+        return typedarrayToBuffer(hash).toString('hex')
     }
 
     // digestData digests the unencrypted data.
     public digestData(data: Uint8Array): Uint8Array {
         // let b = multihashing.digest(toBuffer(data), 'sha2-256')
-        let mh = multihashing(toBuffer(data), 'sha2-256')
-        let decMh = multihashes.decode(mh)
+        let mh = (multihashing as Function)(typedarrayToBuffer(data), 'sha2-256')
+        let decMh = (multihashes as any).decode(mh)
         let b = decMh.digest
 
         return new Uint8Array(b, b.byteOffset, b.byteLength)
@@ -56,7 +56,7 @@ export class LocalDB implements ILocalStore {
         let data = obj.encode(obj).finish()
         let computedDigest = this.digestData(data)
         if (digest && digest.length) {
-            if (!isEqual(new ArrayBuffer(digest as any), new ArrayBuffer(computedDigest as any))) {
+            if (!arraybufferEqual(new ArrayBuffer(digest as any), new ArrayBuffer(computedDigest as any))) {
                 throw new Error('digest of encoded data did not match given digest')
             }
         } else if (hashPtr) {
