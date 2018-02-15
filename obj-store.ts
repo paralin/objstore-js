@@ -5,7 +5,7 @@ import {
     pbobject,
     newObjectWrapper,
 } from '@aperturerobotics/pbobject'
-import { storageref } from '@aperturerobotics/storageref/pb';
+import { storageref } from '@aperturerobotics/storageref';
 
 import {
     IArrayPtr,
