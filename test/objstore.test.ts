@@ -2,7 +2,7 @@ import { objectenc, IResource, ISecretBoxResource } from '@aperturerobotics/obje
 import { MockObject, IEncryptionConfig } from '@aperturerobotics/pbobject'
 
 import randombytes from 'randombytes'
-import * as IPFS from 'ipfs'
+import IPFS from 'ipfs'
 import { ObjectStore } from '../obj-store'
 import { LevelBlobDb } from '../level'
 import { RemoteStore } from '../ipfs'

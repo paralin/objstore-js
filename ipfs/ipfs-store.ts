@@ -1,4 +1,4 @@
-import * as IPFS from 'ipfs'
+import IPFS from 'ipfs'
 import { IRemoteStore } from '../interfaces'
 
 // RemoteStore implements the remote store against IPFS.

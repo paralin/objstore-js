@@ -56,7 +56,7 @@ export class LocalDB implements ILocalStore {
         let data = obj.encode(obj).finish()
         let computedDigest = this.digestData(data)
         if (digest && digest.length) {
-            if (!isEqual(digest, computedDigest)) {
+            if (!isEqual(new ArrayBuffer(digest as any), new ArrayBuffer(computedDigest as any))) {
                 throw new Error('digest of encoded data did not match given digest')
             }
         } else if (hashPtr) {
