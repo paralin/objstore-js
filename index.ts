@@ -1,6 +1,6 @@
 export * from './interfaces'
 export * from './obj-store'
-export * from './level'
+// export * from './level'
 export * from './ipfs'
 export * from './localdb'
 export * from './inmem'

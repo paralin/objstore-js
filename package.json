@@ -3,8 +3,10 @@
     "private": true,
     "version": "0.0.0",
     "description": "Object storage and caching with pluggable encryption schemes.",
-    "main": "index.ts",
+    "main": "dist/es/index.js",
+    "types": "dist/types/index.d.ts",
     "author": "Christian Stewart <christian@paral.in>",
+    "license": "UNLICENSED",
     "repository": {
         "type": "git",
         "url": "git@github.com:aperturerobotics/objstore-js.git"
@@ -13,6 +15,7 @@
         "node": ">=6.0.0"
     },
     "scripts": {
+        "build": "tsc && ./hack/copy_pb.bash",
         "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
         "prebuild": "rimraf dist",
         "test": "jest",
@@ -40,9 +43,6 @@
         "transform": {
             ".(ts|tsx)": "../../node_modules/ts-jest/preprocessor.js"
         },
-        "transformIgnorePatterns": [
-            "(!@aperturerobotics)"
-        ],
         "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
         "moduleFileExtensions": [
             "ts",
@@ -84,14 +84,14 @@
         "prettier": "^1.4.4",
         "prompt": "^1.0.0",
         "replace-in-file": "^3.0.0-beta.2",
-        "rimraf": "^2.6.1",
+        "rimraf": "^2.6.2",
         "ts-jest": "^22.0.0",
         "ts-node": "^4.0.1",
         "tslint": "^5.4.3",
         "tslint-config-prettier": "^1.1.0",
         "tslint-config-standard": "^7.0.0",
         "typedoc": "^0.9.0",
-        "typescript": "^2.3.4",
+        "typescript": "^2.7.0",
         "validate-commit-msg": "^2.12.2"
     },
     "dependencies": {

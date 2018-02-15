@@ -2,7 +2,7 @@ import * as pbobject from '@aperturerobotics/pbobject'
 
 // IArrayPtr is an updatable pointer to an array.
 export interface IArrayPtr {
-    ptr: Uint8Array | null
+    ptr?: Uint8Array | null
 }
 
 // ILocalStore is the local cached unencrypted hash blob store.

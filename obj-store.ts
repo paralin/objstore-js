@@ -1,4 +1,10 @@
-import * as pbobject from '@aperturerobotics/pbobject'
+import {
+    IEncryptionConfig,
+    IObject,
+    ObjectWrapper,
+    pbobject,
+    newObjectWrapper,
+} from '@aperturerobotics/pbobject'
 import { storageref } from '@aperturerobotics/storageref/pb';
 
 import {
@@ -29,9 +35,9 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
     public async getOrFetch(
         digest: Uint8Array,
         storageRef: string,
-        obj: pbobject.IObject,
-        encConf: pbobject.IEncryptionConfig,
-    ): Promise<pbobject.IObject> {
+        obj: IObject,
+        encConf: IEncryptionConfig,
+    ): Promise<IObject> {
         // Attempt to cache hit the local db
         try {
             let localObj = await this.getLocal(digest, obj)
@@ -54,7 +60,7 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
 
         // Decode and decrypt the wrapper
         let wrapperInner = pbobject.ObjectWrapper.decode(data)
-        let wrapper = new pbobject.ObjectWrapper(wrapperInner)
+        let wrapper = new ObjectWrapper(wrapperInner)
         let objDecoded = await wrapper.decodeToObject(obj, encConf)
 
         // Store it locally
@@ -64,10 +70,10 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
 
     // storeObject digests, seals, encrypts, and stores a object locally and remotely.
     // Returns a result or throws an error.
-    public async storeObject(obj: pbobject.IObject, encConf: pbobject.IEncryptionConfig): Promise<IStoreObjectResult> {
-        let owres = await pbobject.newObjectWrapper(obj, encConf)
+    public async storeObject(obj: IObject, encConf: IEncryptionConfig): Promise<IStoreObjectResult> {
+        let owres = await newObjectWrapper(obj, encConf)
         let ow = owres.wrapper
-        let blob = pbobject.ObjectWrapper.encode(ow).finish()
+        let blob = ObjectWrapper.encode(ow).finish()
         let digest = this.digestData(owres.data)
         let storageRefStr = await this.storeRemote(blob)
         let storageRef = new storageref.StorageRef({
@@ -83,12 +89,12 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
     }
 
     // getLocal returns an object by digest, assuming it has already been fetched into the decrypted cache.
-    public getLocal(digest: Uint8Array, obj: pbobject.IObject): Promise<pbobject.IObject> {
+    public getLocal(digest: Uint8Array, obj: IObject): Promise<IObject> {
         return this.localStore.getLocal(digest, obj)
     }
 
     // storeLocal encodes an object to an unencrypted blob, hashing it with the database hashing scheme.
-    public storeLocal(obj: pbobject.IObject, hashPtr: IArrayPtr): Promise<void> {
+    public storeLocal(obj: IObject, hashPtr: IArrayPtr): Promise<void> {
         return this.localStore.storeLocal(obj, hashPtr)
     }
 
@@ -111,9 +117,9 @@ export class ObjectStore implements ILocalStore, IRemoteStore {
     // getOrFetchReference gets or fetches a reference, checking the reference type.
     public getOrFetchReference(
         ref: storageref.IStorageRef | null,
-        obj: pbobject.IObject,
-        encConf: pbobject.IEncryptionConfig,
-    ): Promise<pbobject.IObject> {
+        obj: IObject,
+        encConf: IEncryptionConfig,
+    ): Promise<IObject> {
         if (!ref) {
             throw new Error('storage reference expected')
         }

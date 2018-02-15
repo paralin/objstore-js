@@ -20,4 +20,9 @@ export class Prefixer implements IDb {
         prefix = this.prefix + prefix
         return this.db.listKeys(prefix)
     }
+
+    // clearKeys clears the database.
+    public async clearKeys(): Promise<void> {
+        return this.db.clearKeys()
+    }
 }
