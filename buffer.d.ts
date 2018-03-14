@@ -1,4 +1,4 @@
 declare module 'typedarray-to-buffer' {
-    var x: any;
-    export = x;
+    var typedarrayToBuffer: Function;
+    export = typedarrayToBuffer;
 }

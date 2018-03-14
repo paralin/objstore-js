@@ -1,4 +1,5 @@
 import { IDb } from '../db'
+import typedarrayToBuffer from 'typedarray-to-buffer'
 
 // InmemDB implements a key-value database in memory.
 export class InmemDB implements IDb {
@@ -35,6 +36,12 @@ export class InmemDB implements IDb {
 
         return result
     }
+
+    // getDigestKey returns the key for the given digest.
+    public getDigestKey(hash: Uint8Array): string {
+        return typedarrayToBuffer(hash).toString('hex')
+    }
+
 
     // clearKeys clears all of the keys.
     public async clearKeys(): Promise<void> {

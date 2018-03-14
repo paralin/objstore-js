@@ -1,5 +1,5 @@
 import { IDb } from '../db'
-import level from 'level'
+import * as level from 'level-browserify'
 
 // LevelBlobDb is the level blob database implementation.
 export class LevelBlobDb implements IDb {
