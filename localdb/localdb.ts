@@ -6,10 +6,10 @@ import {
 import { IDb } from '../db/interfaces'
 import { pbobject, IObject } from '@aperturerobotics/pbobject'
 
-import arraybufferEqual from 'arraybuffer-equal'
-import typedarrayToBuffer from 'typedarray-to-buffer'
-import multihashing from 'multihashing'
-import multihashes from 'multihashes'
+import * as arraybufferEqual from 'arraybuffer-equal'
+import * as toBuffer from 'typedarray-to-buffer'
+import * as multihashing from 'multihashing'
+import * as multihashes from 'multihashes'
 
 // LocalDB wraps a db.IDb to implement LocalStore.
 export class LocalDB implements ILocalStore {
@@ -22,13 +22,13 @@ export class LocalDB implements ILocalStore {
 
     // getDigestKey returns the key for the given digest.
     public getDigestKey(hash: Uint8Array): string {
-        return typedarrayToBuffer(hash).toString('hex')
+        return toBuffer(hash).toString('hex')
     }
 
     // digestData digests the unencrypted data.
     public digestData(data: Uint8Array): Uint8Array {
         // let b = multihashing.digest(toBuffer(data), 'sha2-256')
-        let mh = (multihashing as Function)(typedarrayToBuffer(data), 'sha2-256')
+        let mh = (multihashing as Function)(toBuffer(data), 'sha2-256')
         let decMh = (multihashes as any).decode(mh)
         let b = decMh.digest
 
